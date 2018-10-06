@@ -7,11 +7,23 @@ import store from './store'
 
 import Oanda from '@/plugins/oanda.js'
 import Creds from '@/private/creds.js'
+import Model from '@/plugins/tf.js'
 
 Vue.use(Oanda, {
   credentials: {
-    'key': Creds.key,
-    'acntId': Creds.acntId
+    key: Creds.key,
+    acntId: Creds.acntId
+  }
+})
+
+Vue.use(Model, {
+  modelSettings: {
+    learningRate: 0.1,
+    numInputs: 5,
+    numOutputs: 1,
+    numNeurons: 256,
+    batchSize: 128,
+    epochs: 25
   }
 })
 
