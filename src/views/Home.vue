@@ -3,9 +3,9 @@
     <v-app>
       <v-content>
         <v-container>
+          <v-btn v-if="disabled" color="success" @click="prepData">Prep Data</v-btn>
+          <v-btn v-else color="success" @click="trainModel">Train Model</v-btn>
           <Chart :chartData="chartDataArrays"></Chart>
-          <v-btn color="success" @click="prepData">Prep Data</v-btn>
-          <v-btn color="success" @click="trainModel">Train Model</v-btn>
         </v-container>
       </v-content>
     </v-app>
@@ -18,6 +18,7 @@ export default {
   name: 'Home',
   data () {
     return {
+      disabled: true,
       batchSize: 128,
       indexBegin: 0,
       indexEnd: 128,
@@ -57,7 +58,8 @@ export default {
   methods: {
     async prepData () {
       // Fetch candlestick data from Oanda
-      let res = await this.$candlesM4('EUR_USD', 13, 0)
+      let res = await this.$candlesM4('EUR_USD', 180, 0, 'H1')
+      console.log(res)
       // Loop through returned data, starting at index 0, push vol, o, h, l, c to features array
       for (let i = 0; i < (res.candles.length - 1); i++) {
         this.features.push([
@@ -96,6 +98,7 @@ export default {
         this.modelData.testFeatures.push(this.features[i])
         this.modelData.testLabels.push(this.labels[i])
       }
+      this.disabled = false
     },
     async trainModel () {
       let predictions = await this.$train(this.modelData)
@@ -107,5 +110,11 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>

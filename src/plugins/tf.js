@@ -50,6 +50,7 @@ export default {
       for (let i = 0; i < data.testFeatures.length; i++) {
         predictions.push(model.predict(tf.tensor2d(data.testFeatures[i], [1, 5])).dataSync()[0])
       }
+      model.save('indexeddb://tf-forex-model')
       return predictions
     }
   }
