@@ -21,8 +21,8 @@ export default {
     })
 
     const outputLayer = tf.layers.dense({
-      units: numOutputs,
-      activation: 'relu'
+      units: numOutputs
+      // activation: 'relu'
     })
 
     model.add(inputLayer)
@@ -46,9 +46,11 @@ export default {
         let loss = response.history.loss[0]
         console.log(`Rd: ${i} Training Loss: ${loss}`)
       }
+      let predictions = []
       for (let i = 0; i < data.testFeatures.length; i++) {
-        model.predict(tf.tensor2d(data.testFeatures[i], [1, 5])).print()
+        predictions.push(model.predict(tf.tensor2d(data.testFeatures[i], [1, 5])).dataSync()[0])
       }
+      return predictions
     }
   }
 }

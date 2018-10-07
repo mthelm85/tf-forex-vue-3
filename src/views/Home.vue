@@ -3,6 +3,7 @@
     <v-app>
       <v-content>
         <v-container>
+          <Chart :chartData="chartDataArrays"></Chart>
           <v-btn color="success" @click="prepData">Prep Data</v-btn>
           <v-btn color="success" @click="trainModel">Train Model</v-btn>
         </v-container>
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import Chart from '@/components/Chart.vue'
 export default {
   name: 'Home',
   data () {
@@ -26,11 +28,27 @@ export default {
         trainingLabels: [],
         testFeatures: [],
         testLabels: []
-      }
+      },
+      predictions: []
     }
   },
 
+  components: {
+    Chart
+  },
+
   computed: {
+    chartDataArrays () {
+      let data = {
+        test: [],
+        predictions: []
+      }
+      for (let i = 0; i < this.predictions.length; i++) {
+        data.test.push(this.modelData.testLabels[i][0])
+        data.predictions.push(this.predictions[i])
+      }
+      return data
+    },
     iterations () {
       return Math.floor((this.features.length - (this.batchSize * 4)) / this.batchSize)
     }
@@ -68,7 +86,7 @@ export default {
         // Loop through sliced arrays, push data to temporary arrays
         for (let i = 0; i < this.batchSize; i++) {
           batchedFeatures.push(slicedFeatures[i])
-          batchedLabels.push(slicedLabels[i] > slicedFeatures[i][4] ? 1 : 0)
+          batchedLabels.push(slicedLabels[i])
         }
         this.modelData.trainingFeatures.push(batchedFeatures)
         this.modelData.trainingLabels.push(batchedLabels)
@@ -76,11 +94,14 @@ export default {
       // Loop through features/labels, separate out test data into their arrays
       for (let i = (this.batchSize * this.iterations); i < ((this.batchSize * 4) + (this.batchSize * this.iterations)); i++) {
         this.modelData.testFeatures.push(this.features[i])
-        this.modelData.testLabels.push(this.labels[i] > this.features[i][4] ? 1 : 0)
+        this.modelData.testLabels.push(this.labels[i])
       }
     },
-    trainModel () {
-      this.$train(this.modelData)
+    async trainModel () {
+      let predictions = await this.$train(this.modelData)
+      for (let i = 0; i < predictions.length; i++) {
+        this.predictions.push(predictions[i])
+      }
     }
   }
 }

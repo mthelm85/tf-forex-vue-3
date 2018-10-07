@@ -4,6 +4,8 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js'
 
 import Oanda from '@/plugins/oanda.js'
 import Creds from '@/private/creds.js'
@@ -18,7 +20,7 @@ Vue.use(Oanda, {
 
 Vue.use(Model, {
   modelSettings: {
-    learningRate: 0.1,
+    learningRate: 0.05,
     numInputs: 5,
     numOutputs: 1,
     numNeurons: 256,
@@ -26,6 +28,8 @@ Vue.use(Model, {
     epochs: 25
   }
 })
+
+Vue.use(VueChartkick, { adapter: Chart })
 
 Vue.config.productionTip = false
 
