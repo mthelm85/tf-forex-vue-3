@@ -20,12 +20,12 @@ Vue.use(Oanda, {
 
 Vue.use(Model, {
   modelSettings: {
-    learningRate: 0.05,
+    learningRate: 0.1,
     numInputs: 5,
     numOutputs: 1,
     numNeurons: 256,
     batchSize: 128,
-    epochs: 125
+    epochs: 75
   }
 })
 

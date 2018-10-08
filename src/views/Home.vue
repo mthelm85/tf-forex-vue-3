@@ -58,7 +58,7 @@ export default {
   methods: {
     async prepData () {
       // Fetch candlestick data from Oanda
-      let res = await this.$candlesM4('EUR_USD', 180, 0, 'H1')
+      let res = await this.$candlesM4('EUR_USD', 100, 0, 'M30')
       console.log(res)
       // Loop through returned data, starting at index 0, push vol, o, h, l, c to features array
       for (let i = 0; i < (res.candles.length - 1); i++) {
