@@ -19,9 +19,9 @@ export default {
   data () {
     return {
       disabled: true,
-      batchSize: 128,
+      batchSize: 32,
       indexBegin: 0,
-      indexEnd: 128,
+      indexEnd: 32,
       features: [],
       labels: [],
       modelData: {
@@ -51,7 +51,7 @@ export default {
       return data
     },
     iterations () {
-      return Math.floor((this.features.length - (this.batchSize * 4)) / this.batchSize)
+      return Math.floor((this.features.length - (this.batchSize * 2)) / this.batchSize)
     }
   },
 
@@ -60,18 +60,29 @@ export default {
       // Fetch candlestick data from Oanda
       let res = await this.$candlesM4('EUR_USD', 100, 0, 'M30')
       console.log(res)
+      let resThird = Math.floor(res.candles.length / 3)
       // Loop through returned data, starting at index 0, push vol, o, h, l, c to features array
-      for (let i = 0; i < (res.candles.length - 1); i++) {
+      for (let i = 0; i < (resThird - 3); i += 3) {
         this.features.push([
           res.candles[i].volume / 10000,
           1 / Number(res.candles[i].bid.o),
           1 / Number(res.candles[i].bid.h),
           1 / Number(res.candles[i].bid.l),
-          1 / Number(res.candles[i].bid.c)
+          1 / Number(res.candles[i].bid.c),
+          res.candles[i + 1].volume / 10000,
+          1 / Number(res.candles[i + 1].bid.o),
+          1 / Number(res.candles[i + 1].bid.h),
+          1 / Number(res.candles[i + 1].bid.l),
+          1 / Number(res.candles[i + 1].bid.c),
+          res.candles[i + 2].volume / 10000,
+          1 / Number(res.candles[i + 2].bid.o),
+          1 / Number(res.candles[i + 2].bid.h),
+          1 / Number(res.candles[i + 2].bid.l),
+          1 / Number(res.candles[i + 2].bid.c)
         ])
       }
       // Loop through returned data, starting at index 1, push closing price to labels array
-      for (let i = 1; i < res.candles.length; i++) {
+      for (let i = 3; i < resThird; i += 3) {
         this.labels.push([1 / res.candles[i].bid.c])
       }
       // Separate the features/labels into batches of size this.batchSize
@@ -94,7 +105,7 @@ export default {
         this.modelData.trainingLabels.push(batchedLabels)
       }
       // Loop through features/labels, separate out test data into their arrays
-      for (let i = (this.batchSize * this.iterations); i < ((this.batchSize * 4) + (this.batchSize * this.iterations)); i++) {
+      for (let i = (this.batchSize * this.iterations); i < ((this.batchSize * 2) + (this.batchSize * this.iterations)); i++) {
         this.modelData.testFeatures.push(this.features[i])
         this.modelData.testLabels.push(this.labels[i])
       }

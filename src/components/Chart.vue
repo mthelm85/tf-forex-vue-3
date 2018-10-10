@@ -1,6 +1,6 @@
 <template lang="html">
   <v-container>
-    <line-chart :refresh="15" :data="data" :min="0.85" :max="0.885"></line-chart>
+    <line-chart :refresh="15" :data="data" :min="0.85" :max="0.865"></line-chart>
     <v-btn color="secondary" @click="loadChart">Load Chart</v-btn>
     <v-btn color="secondary" @click="accuracyRate">Accuracy</v-btn>
     <span>{{ rate }}%</span>
