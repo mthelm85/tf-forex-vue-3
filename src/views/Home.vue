@@ -7,6 +7,9 @@
           <v-btn v-else color="success" @click="trainModel">Train Model</v-btn>
           <Chart :chartData="chartDataArrays"></Chart>
         </v-container>
+        <v-container>
+          <Predictor></Predictor>
+        </v-container>
       </v-content>
     </v-app>
   </div>
@@ -14,6 +17,7 @@
 
 <script>
 import Chart from '@/components/Chart.vue'
+import Predictor from '@/components/Predictor.vue'
 export default {
   name: 'Home',
   data () {
@@ -35,7 +39,8 @@ export default {
   },
 
   components: {
-    Chart
+    Chart,
+    Predictor
   },
 
   computed: {
