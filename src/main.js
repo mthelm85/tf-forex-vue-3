@@ -25,7 +25,7 @@ Vue.use(Model, {
     numOutputs: 1,
     numNeurons: 256,
     batchSize: 32,
-    epochs: 75
+    epochs: 15
   }
 })
 

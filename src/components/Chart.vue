@@ -1,6 +1,6 @@
 <template lang="html">
   <v-container>
-    <line-chart :refresh="15" :data="data" :min="0.85" :max="0.865"></line-chart>
+    <line-chart :refresh="15" :data="data" :min="0.845" :max="0.875"></line-chart>
     <v-btn color="secondary" @click="loadChart">Load Chart</v-btn>
     <v-btn color="secondary" @click="accuracyRate">Accuracy</v-btn>
     <span>{{ rate }}%</span>
@@ -44,7 +44,7 @@ export default {
       this.rate = ((this.accurates.length / this.testGreaterLess.length) * 100).toFixed(2)
     },
     loadChart () {
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 64; i++) {
         this.testLabels.push([i, this.chartData.test[i]])
         this.predictedLabels.push([i, this.chartData.predictions[i]])
       }
