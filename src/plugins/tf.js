@@ -36,8 +36,8 @@ export default {
 
     Vue.prototype.$train = async (data) => {
       for (let i = 0; i < data.trainingFeatures.length; i++) {
-        let xs = tf.tensor2d(data.trainingFeatures[i], [32, 15])
-        let ys = tf.tensor2d(data.trainingLabels[i], [32, 1])
+        let xs = tf.tensor(data.trainingFeatures[i], [32, 15])
+        let ys = tf.tensor(data.trainingLabels[i], [32, 1])
         let configFit = {
           batchSize: modelSettings.batchSize,
           epochs: modelSettings.epochs
@@ -48,7 +48,7 @@ export default {
       }
       let predictions = []
       for (let i = 0; i < data.testFeatures.length; i++) {
-        predictions.push(model.predict(tf.tensor2d(data.testFeatures[i], [1, 15])).dataSync()[0])
+        predictions.push(model.predict(tf.tensor(data.testFeatures[i], [1, 15])).dataSync()[0])
       }
       model.save('indexeddb://tf-forex-model')
       return predictions

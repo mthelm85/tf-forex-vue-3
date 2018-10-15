@@ -1,8 +1,10 @@
 <template lang="html">
   <v-container>
+    <v-layout justify-center>
+      <span class="display-1 text-xs-center">TensorFlow Model</span>
+    </v-layout>
     <line-chart :refresh="15" :data="data" :min="0.845" :max="0.875"></line-chart>
     <v-btn color="secondary" @click="loadChart">Load Chart</v-btn>
-    <v-btn color="secondary" @click="accuracyRate">Accuracy</v-btn>
     <span>{{ rate }}%</span>
   </v-container>
 </template>
@@ -48,6 +50,7 @@ export default {
         this.testLabels.push([i, this.chartData.test[i]])
         this.predictedLabels.push([i, this.chartData.predictions[i]])
       }
+      this.accuracyRate()
     }
   },
 
